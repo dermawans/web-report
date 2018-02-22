@@ -16,13 +16,13 @@ Theme Version: 	1.4.1
 			series: {
 				lines: {
 					show: true,
-					fill: true,
-					lineWidth: 1,
+					//fill: true,
+					lineWidth: 2,
 					fillColor: {
 						colors: [{
-							opacity: 0.45
+							opacity: 0.15
 						}, {
-							opacity: 0.45
+							opacity: 0.15
 						}]
 					}
 				},
@@ -40,11 +40,10 @@ Theme Version: 	1.4.1
 				backgroundColor: 'transparent'
 			},
 			yaxis: {
-				min: 0,
-				max: 200,
 				color: 'rgba(0,0,0,0.1)'
 			},
 			xaxis: {
+				mode: 'categories',
 				color: 'rgba(0,0,0,0.1)'
 			},
 			tooltip: true,

@@ -232,32 +232,26 @@
 			<div class="panel-body">
 
 				<!-- Flot: Basic -->
-				<div class="chart chart-md" id="flotBasic"></div>
+				<div class="chart chart-md" id="grafikproject"></div>
 				<script type="text/javascript">
-
-					var flotBasicData = [{
-						data: [
-							["New Project", 14],
-							["In Progress", 15],
-							["Expired", 25],
-							["Selftest", 35],
-							["Handover", 9]
-						],
-						label: "Basga",
-						color: "#0088cc"
-					},{
-						data: [
-							["New Project", 3],
-							["In Progress", 19],
-							["Expired", 22],
-							["Selftest", 10],
-							["Handover", 38]
-						],
-						label: "Peny",
-						color: "#ff88cc"
-					}];
-
-					// See: assets/javascripts/ui-elements/examples.charts.js for more settings.
+					
+					var flotBasicData = [
+					 <?php 
+						$no=1;
+						foreach($data_grafiknama as $d){
+					 ?>
+						{
+							data: [
+								["New Project", 1],
+								["In Progress", 3],
+							],
+							label: "<?php echo $d->nama_qt; ?>",
+						 },
+					<?php  
+						$no++;}
+					?>  
+					
+					];
 
 				</script>
 
@@ -269,11 +263,27 @@
 	
 </div>      
 <!-- end: page -->
-
-<!-- js grafik -->
-
-<!-- js grafik -->
-
+<!--
+<?php 
+	foreach($data_grafiknama as $d){
+ ?>
+	{
+		data: [
+			<?php
+			foreach($data_grafik as $dg)
+			{
+			?>
+			["<?php echo $dg->status_project; ?>", <?php echo $dg->jumlah; ?>],
+			<?php 
+			}
+			?>
+		],
+		label: "<?php echo $d->nama_qt; ?>",
+		
+	 },
+<?php  
+	}
+?> -->
 
 
 

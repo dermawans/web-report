@@ -129,6 +129,15 @@ class Model_app extends CI_Model{
 			return $this->db->query("select id_history from projecthistory where isactive=1 and status_project in('Close','Drop','Handover')
 			");	
 		}   
+		
+		function getDataGrafik(){ 
+			return $this->db->query("select nama_qt,status_project,jumlah from pj_summary group by status_project,nama_qt")->result();
+		} 
+		
+		function getDataGrafiknama(){ 
+			return $this->db->query("select nama_qt from pj_summary group by nama_qt")->result();
+		} 
+		
 	// Bagian Dashboard
 	
 	//Bagian Project
@@ -292,37 +301,7 @@ class Model_app extends CI_Model{
 		$kd_project = $this->uri->segment(3);
 		return $this->db->query("select description,status_project from projecthistory where kd_project='".$kd_project."' and isactive= '1'")->result();
     } 
-  
-
-/* 
-	function getDataCoreProject(){
-		$kd_project = array();
-		$kd_project = $this->uri->segment(3);
-		return $this->db->query("select * from core_project
-			where kd_project='".$kd_project."'")->result();
-    } 
-	function getDataProjectAllHistoryDescription(){
-		$kd_project = array();
-		$kd_project = $this->uri->segment(3);
-		return $this->db->query("select 
- 			a.id_history,a.kd_project,a.id_qtname,a.id_pmoname,a.status_project,a.st_awal,a.st_akhir,a.create_date,a.description,
-			b.username as pmoname,     
-			c.username as qtname,
-			d.username as creator
-			from projecthistory a left join webuser b on a.id_pmoname=b.id_name
-			left join webuser c on a.id_qtname=c.id_name
-			left join webuser d on a.create_by=d.id_name
-			where a.kd_project='".$kd_project."' order by a.id_history desc")->result();
-    } 
-	function getDataProjectDescription(){
-		$kd_project = array();
-		$kd_project = $this->uri->segment(3);
-		return $this->db->query("select description,status_project from projecthistory
-			where kd_project='".$kd_project."' order by create_date desc limit 1")->result();
-    } 
-
- */
-
+ 
 	//Bagian Project
 	
 	//Bagian Users =================

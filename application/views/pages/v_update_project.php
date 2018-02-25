@@ -72,17 +72,6 @@
 							<div id="<?php echo $pahd->id_history; ?>" class="accordion-body collapse">
 								<div class="panel-body">
 							<textarea class="form-control" readonly="readonly"><?php echo $pahd->description; ?></textarea>		
-		<!--			<section class="panel">
-							<div class="panel-body">
-								<form class="form-horizontal form-bordered form-bordered" action="#">  
-									<div class="form-group">  
-										<div>
-											<textarea class="form-control" readonly="readonly"><?php echo $pahd->description; ?></textarea>
-										</div>
-									</div>  
-								</form>
-							</div>
-						</section> -->
 								</div>
 							</div>
 						</div>
@@ -103,9 +92,13 @@
 			    	<a href="#add_qt_pic" class="modal-with-form btn btn-primary">Assign QT PIC</a>
 					<?php } ?>
 					<?php if($this->session->userdata('ROLEID') == '2' or $this->session->userdata('ROLEID') == '1') { ?>
-			    	<a href="#qt_update" class="modal-with-form btn btn-primary">Update</a> 
-					<?php } ?>
-					<?php if($this->session->userdata('ROLEID') == '3' or $this->session->userdata('ROLEID') == '4' and $lsph->status_project<>'New Project') { ?>
+						  <?php if($lsph->status_project=='Expired') { ?>
+						  <a href="" class="modal-with-form btn btn-primary" disabled>Update</a> 
+					<?php } else { ?>
+						  <a href="#qt_update" class="modal-with-form btn btn-primary">Update</a> 
+					<?php }
+					} ?>
+					<?php if(($this->session->userdata('ROLEID') == '3' or $this->session->userdata('ROLEID') == '4') and $lsph->status_project<>'New Project') { ?>
 			    	<a href="#pmo_update" class="modal-with-form btn btn-primary">Give Feedback</a> 
 					<?php }
 						}
@@ -125,6 +118,10 @@
 	</div>
 </section> 
 
+<?php
+if(isset($laststatusprojecthistory)){
+foreach($laststatusprojecthistory as $lsph){ 
+	if($this->session->userdata('ROLEID') == '2' and $lsph->status_project=='New Project') { ?>
 <!-- Modal Form Assign QT PIC-->
 <div id="add_qt_pic" class="modal-block modal-block-primary mfp-hide">
 <?php echo form_open_multipart('project/add_qt_pic','id="wizard" class="form-horizontal"'); ?> 
@@ -198,14 +195,10 @@
 				<?php
 				  if(isset($laststatusprojecthistory)){
 				  foreach($laststatusprojecthistory as $lsph){
-				?>
-		        <!--		<div class="form-group mt-lg"> -->
+				?> 
 				 <div class="textarea">
 		            <label class="col-sm-2 control-label">Description</label>
 				<textarea id="description" name="description" data-plugin-markdown-editor rows="10"><?php echo $lsph->description; ?></textarea>
-		        <!--    <div class="col-md-6"> 
-		                <textarea id="description" name="description" data-plugin-markdown-editor rows="10"><?php echo $lsph->description; ?></textarea>
-					</div> -->
 		        </div>
 				<?php }
 				}
@@ -234,8 +227,13 @@
 <?php echo form_close(); ?> 
 </div>
 <!-- Modal Form Assign QT PIC-->
-             
+<?php } }}?>             
 
+
+<?php
+if(isset($laststatusprojecthistory)){
+foreach($laststatusprojecthistory as $lsph){ 
+	if(($this->session->userdata('ROLEID') == '2' or $this->session->userdata('ROLEID') == '1') and $lsph->status_project <>'Expired') { ?>
 <!-- Modal Form QT UPDATE-->
 <div id="qt_update" class="modal-block modal-block-primary mfp-hide">
 <?php echo form_open_multipart('project/qt_update','id="wizard" class="form-horizontal"'); ?> 
@@ -262,14 +260,13 @@
 		            <label class="col-sm-4 control-label">Project Status</label>
 		            <div class="col-sm-6">
 				<select data-plugin-selectTwo class="form-control populate" id="status_project" name="status_project" placeholder="Chose Status" required>                        	 
-				<option value=""></option>
-				<?php if($this->session->userdata('ROLEID') == '2') { ?> 
-				<option value="Expired">Expired</option> 
-      	                  	<?php } ?>
-				<option value="Preparation">Preparation</option>
-				<option value="In Progress">In Progress</option>                        	
+							<option value="<?php echo $dp->status_project; ?>"><?php echo $dp->status_project; ?></option> 
+							<option value="Expired">Expired</option>  
+							<option value="Idle">Idle</option>
+							<option value="In Progress">In Progress</option>                        	
                         	<option value="Handover">Handover</option> 
                         	<option value="Pending">Pending</option> 
+                            <option value="Preparation">Preparation</option>
                         	<option value="Selft Test">Selft Test</option> 
                         </select> 
 		            </div>
@@ -309,13 +306,9 @@
 				  if(isset($laststatusprojecthistory)){
 				  foreach($laststatusprojecthistory as $lsph){
 				?>
-			   <!-- <div class="form-group mt-lg"> -->
-				<div class="textarea">
+			    <div class="textarea">
 		            <label class="col-sm-2 control-label">Description</label>
 				<textarea id="description" name="description" data-plugin-markdown-editor rows="10"><?php echo $lsph->description; ?></textarea>
-		           <!--  <div class="col-md-6"> 
-		                <textarea id="description" name="description" data-plugin-markdown-editor rows="10"><?php echo $lsph->description; ?></textarea>
-					</div> -->
 		        </div>
 				<?php }
 				}
@@ -342,12 +335,13 @@
 <?php echo form_close(); ?> 
 </div>
 <!-- Modal Form QT UPDATE-->
+<?php } }}?>             
 
 
+<?php if($this->session->userdata('ROLEID') == '3' or $this->session->userdata('ROLEID') == '4') { ?>			    	
 <!-- Modal Form PMO UPDATE-->
 <div id="pmo_update" class="modal-block modal-block-primary mfp-hide">
 <?php echo form_open_multipart('project/pmo_update','id="wizard" class="form-horizontal"'); ?> 
-
  
     <section class="panel">
         <header class="panel-heading">
@@ -370,8 +364,7 @@
 		            <label class="col-sm-4 control-label">Project Status</label>
 		            <div class="col-sm-6">
 						<select data-plugin-selectTwo class="form-control populate" id="status_project" name="status_project" placeholder="Chose Status" required>
-                        <!--	<option value=""></option>  -->
-				<option value="<?php echo $dp->status_project; ?>"><?php echo $dp->status_project; ?></option> 
+							<option value="<?php echo $dp->status_project; ?>"><?php echo $dp->status_project; ?></option> 
                         	<option value="New Project">New Project</option> 
                         	<option value="Drop">Drop</option>   
                         	<option value="Pending">Pending</option>  
@@ -445,12 +438,6 @@
                         <textarea id="description" name="description" data-plugin-markdown-editor rows="10"></textarea>
                    </div>
 
-			<!--	<div class="form-group mt-lg">
-		            <label class="col-sm-4 control-label">Description</label>
-		            <div class="col-md-6"> 
-		                <textarea id="description" name="description" data-plugin-markdown-editor rows="10"><?php echo $lsph->description; ?></textarea>
-					</div>
-		        </div> -->
 				<?php }
 				}
 				?> 
@@ -477,3 +464,4 @@
 <?php echo form_close(); ?> 
 </div>
 <!-- Modal Form PMO UPDATE-->
+<?php } ?>

@@ -72,8 +72,7 @@
             </div>	 	 
 				 <?php
 				  if(isset($projectallhistorydescription)){
-				  $no=1; 
-				  foreach($projectallhistorydescription as $pahd){
+				  $no=1; foreach($projectallhistorydescription as $pahd){
 				 ?>
 					<div class="col-md-12">
 						<div class="panel-group" id="accordion">

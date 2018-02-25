@@ -32,13 +32,8 @@ class Dashboard extends CI_Controller{
             'jumlah_inactive_kordinator' => $this->model_app->getCountAllInActiveProject()->num_rows()
         ); 
 		
-		$data=array(
-			'data_grafiknama'=>$this->model_app->getDataGrafiknama(),
-			'data_grafik'=>$this->model_app->getDataGrafik()
-		);
-			
         $this->load->view('element/v_header',$data_header);
-        $this->load->view('pages/v_dashboard',$data);
+        $this->load->view('pages/v_dashboard');
         $this->load->view('element/v_footer');
     	
 		 

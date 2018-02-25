@@ -131,11 +131,11 @@ class Model_app extends CI_Model{
 		}   
 		
 		function getDataGrafik(){ 
-			return $this->db->query("select nama_qt,status_project,jumlah from pj_summary group by status_project,nama_qt")->result();
+			return $this->db->query("select name_user,project_stat,jumlah from project_summary group by project_stat,name_user")->result();
 		} 
 		
 		function getDataGrafiknama(){ 
-			return $this->db->query("SELECT nama_qt, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE() group by nama_qt ")->result();
+			return $this->db->query("SELECT name_user, DATE_FORMAT(project_summary.created_date, '%Y-%m-%d') FROM project_summary WHERE DATE(created_date) = CURDATE() group by name_user ")->result();
 		} 
 		
 	// Bagian Dashboard

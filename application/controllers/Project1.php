@@ -7,7 +7,6 @@ class Project extends CI_Controller{
             redirect(''); 
         };
         $this->load->model('model_app');   
-		$this->load->library('email');
     }
 
     function index(){
@@ -225,31 +224,6 @@ class Project extends CI_Controller{
 			$projecthistory['create_date'] = date('Y-m-d H:i:s'); 
 			$projecthistory['create_by'] = $this->input->post('create_by');
 			$this->db->insert('projecthistory', $projecthistory); 
-			
-			
-			$config = array();
-			$config['charset'] = 'utf-8';
-			$config['useragent'] = 'sendmail';
-			$config['protocol']= "smtp";
-			$config['mailtype']= "html";
-			$config['smtp_host']="https://zmbr.saranaonline.com";//pengaturan smtp
-			$config['smtp_port']= "587";//atau25
-			$config['smtp_timeout']= "400";
-			$config['smtp_user']= "dermawan_suprihatin@saranaonline.com"; // isi dengan email kamu
-			$config['smtp_pass']= "Wawan123!@#"; // isi dengan password kamu
-			$config['crlf']="\r\n"; 
-			$config['newline']="\r\n"; 
-			$config['wordwrap'] = TRUE;
-			//memanggil library email dan set konfigurasi untuk pengiriman email
-			$this->load->library('email');
-			$this->email->initialize($config);
-			//konfigurasi pengiriman
-			$email1="dermawan_suprihatin@saranaonline.com";
-			$this->email->from($config['smtp_user']);
-			$this->email->to($email1);
-			$this->email->subject("Project Update");
-			$this->email->message("Project sudah di update");
-			$this->email->send();
 			
 			header('location:'.base_url().'project');
 		}

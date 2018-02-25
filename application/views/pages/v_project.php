@@ -1,7 +1,7 @@
 <section class="panel panel-dark">
     <header class="panel-heading">
         <div class="panel-actions">
-            <a href="#" class="panel-action" data-panel-toggle></a> 
+            <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a> 
         </div>
         <h2 class="panel-title">Project
         </h2>
@@ -16,7 +16,8 @@
                     <th>Project Name</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Project Status</th>
+                    <th>Project Status</th>	
+                    <th>Timeline Status</th>	
                     <th>PMO</th>
                     <th>QT</th>
                     <th>
@@ -38,38 +39,37 @@
 				if(isset($data_project)){
 					foreach($data_project as $row){ 
 			?>
-			
-						<tr class="gradeX">
-							<th><?php echo $no++; ?></th>
-							<th><?php echo $row->projectname; ?></th>
-							<th><?php echo date("d M Y",strtotime($row->st_awal)); ?></th>
-							<th><?php echo date("d M Y",strtotime($row->st_akhir)); ?></th>
-							<th> 
-								<?php
-								$akhir=strtotime($row->st_akhir);
-								$sekarang= time();
-								$sisa = $akhir-$sekarang;
-								$sisahari= floor($sisa / (60 * 60 * 24)+1)." days left";
-								if ($sisahari>0)
-								{ echo $sisahari; }
-								else if ($sisahari==0)
-								{ echo "Expired Today"; }
-								else
-								{ echo "Expired"; }
-								?><br>
-								<?php echo $row->status_project; ?>
-							</th>
-							<th><?php echo $row->pmoname; ?></th>
-							<th><?php echo $row->qtname; ?></th> 
-							<th>
-								<a class="btn btn-primary btn-sm" href="<?php echo site_url('project/view_project/'.$row->kd_project)?>">
-									<i class="fa fa-eye"></i> View</a>
+				<tr class="gradeX">
+					<th><?php echo $no++; ?></th>
+					<th><?php echo $row->projectname; ?></th>
+					<th><?php echo date("d M Y",strtotime($row->st_awal)); ?></th>
+					<th><?php echo date("d M Y",strtotime($row->st_akhir)); ?></th>
+					<th><?php echo $row->status_project; ?></th>
+					<th>
+						<?php
+						$akhir=strtotime($row->st_akhir);
+						$sekarang= time();
+						$sisa = $akhir-$sekarang;
+						$sisahari= floor($sisa / (60 * 60 * 24)+1)." days left";
+						if ($sisahari>0)
+						{ echo $sisahari; }
+						else if ($sisahari==0)
+						{ echo "Expired Today"; }
+						else
+						{ echo "Expired"; }
+						?>
+					</th>
+					<th><?php echo $row->pmoname; ?></th>
+					<th><?php echo $row->qtname; ?></th> 
+					<th>
+						<a class="btn btn-primary btn-sm" href="<?php echo site_url('project/view_project/'.$row->kd_project)?>">
+							<i class="fa fa-eye"></i> View</a>
 
-								<a class="btn btn-primary btn-sm" href="<?php echo site_url('project/update_project/'.$row->kd_project)?>">
-									<i class="fa fa-pencil"></i> Update</a>
-							</th>
-						</tr>
-					<?php }
+						<a class="btn btn-primary btn-sm" href="<?php echo site_url('project/update_project/'.$row->kd_project)?>">
+							<i class="fa fa-pencil"></i> Update</a>
+					</th>
+				</tr>
+			  <?php }
 				}
 			  ?>
 
@@ -164,25 +164,19 @@
 						</div>
 					</div>
                 </div>	
-				
-                    <div class="textarea">
-			<label class="col-sm-2 control-label">Description</label>
-			<textarea id="description" name="description" data-plugin-markdown-editor rows="10"></textarea>
-                    </div>
 
-
-<!--	 		<div class="form-group mt-lg">		 
-                    <label class="col-sm-2 control-label">Description</label>                    
-			
-				 <div class="form-group"> 
+				<div class="form-group mt-lg">
+                    <label class="col-sm-4 control-label">Description</label>
+                    <div class="col-md-6">
+						 <div class="form-group"> 
 							<div class="col-md-12">
 								<div class="input-group">
 									<textarea id="description" name="description" data-plugin-markdown-editor rows="10"></textarea>
 								</div>
-							</div> 
-						</div> 
+							</div>
+						</div>
 					</div>
-                </div> -->
+                </div>
   
                 <div class="form-group">
                     <div class="col-md-6">

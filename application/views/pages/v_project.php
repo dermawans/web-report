@@ -8,6 +8,18 @@
     </header>
     
     <div class="panel-body">
+		<!-- NOTIF -->
+		<?php
+		$message_sukses = $this->session->flashdata('notif-sukses');
+		if($message_sukses){
+			echo '<p class="alert alert-success text-center">'.$message_sukses .'</p>';
+		}
+		$message_gagal = $this->session->flashdata('notif-gagal');
+		if($message_gagal)
+		{
+			echo '<p class="alert alert-danger text-center">'.$message_gagal .'</p>';
+		}
+		?>   
         <div class="table-responsive">
         <table class="table table-bordered table-striped table-condensed mb-none" id="datatable-tabletools" data-swf-path="<?php echo base_url(); ?>assets/vendor/jquery-datatables/extras/TableTools/swf/copy_csv_xls_pdf.swf">
             <thead>
@@ -75,9 +87,16 @@
 
             </tbody>
         </table>
+			<br>
+			<div class="text-right">
+			<?php 
+			if ($this->session->userdata('ROLEID') == '1' or $this->session->userdata('ROLEID') == '2') { 
+			?>
+			<a href="<?php echo site_url('project/send_report_qt')?>" class="btn btn-sm btn-primary"><i class="fa fa-book"></i> Send Report</a>
+			<?php } ?>
+			</div>
         </div>
     </div>
-    
 </section>
 
 
@@ -181,11 +200,8 @@
                 <div class="form-group">
                     <div class="col-md-6">
                         <input id="create_by" type="hidden"  class="form-control" name="create_by" value="<?php echo $this->session->userdata('ID') ?>" readonly="readonly">
-						<!--<input id="create_date" type="text"  class="form-control" name="create_date" value="<?php echo $this->session->userdata('USERNAME') ?> <?php date_default_timezone_set('Asia/Jakarta'); echo date('Y-m-d H:i:s') ;  ?>" readonly="readonly">-->
-                    </div>
+					</div>
                 </div>
-		
-
             </form>
         </div>
         <footer class="panel-footer">

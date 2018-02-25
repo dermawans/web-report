@@ -229,66 +229,33 @@
 				<p class="panel-subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 			</header>
 			<div class="panel-body">
-
-				<!-- Flot: Basic -->
-				<div class="chart chart-md" id="grafikproject"></div>
+				<!-- Morris: Bar -->
+				<div class="chart chart-md" id="morrisBar"></div>
 				<script type="text/javascript">
-					
-					var flotBasicData = [
-					 <?php 
-						foreach($data_grafiknama as $d){
-					 ?>
-						{
-							data: [
-									<?php
-										$dataa= $this->db->query("SELECT status_project ,jumlah, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE() and nama_qt='".$d->nama_qt."' ORDER BY status_project DESC")->result();
-										foreach($dataa as $dg)
-										{
-									?>
-											["<?php echo $dg->status_project; ?>", <?php echo $dg->jumlah; ?>],
-									<?php 
-										}
-									?>
-							],
-							label: "<?php echo $d->nama_qt; ?>",
-						 },
-					<?php  
-						}
-					?>  
-					
+					var morrisBarData = [
+						<?php 
+							foreach($data_grafiknama as $d){
+						?>
+							{
+							'namaqt': "<?php echo $d->nama_qt; ?>",
+								<?php
+									$dataa= $this->db->query("SELECT status_project ,jumlah, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE()-2 and nama_qt='".$d->nama_qt."' ORDER BY status_project DESC")->result();
+									foreach($dataa as $dg)
+									{
+								?>
+								"<?php echo $dg->status_project; ?>": "<?php echo $dg->jumlah; ?>",
+								<?php } ?>
+							},
+						<?php } ?>
 					];
-
-				</script>
-
+				</script> 
 			</div>
 		</section>
 	</div>
 	
-	<!-- Start grafik -->
+	<!-- End grafik -->
 	
 </div>      
 <!-- end: page -->
-<!--
-<?php 
-	foreach($data_grafiknama as $d){
- ?>
-	{
-		data: [
-			<?php
-			foreach($data_grafik as $dg)
-			{
-			?>
-			["<?php echo $dg->status_project; ?>", <?php echo $dg->jumlah; ?>],
-			<?php 
-			}
-			?>
-		],
-		label: "<?php echo $d->nama_qt; ?>",
-		
-	 },
-<?php  
-	}
-?> -->
-
 
 

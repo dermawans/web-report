@@ -226,31 +226,6 @@ class Project extends CI_Controller{
 			$projecthistory['create_by'] = $this->input->post('create_by');
 			$this->db->insert('projecthistory', $projecthistory); 
 			
-			
-			$config = array();
-			$config['charset'] = 'utf-8';
-			$config['useragent'] = 'sendmail';
-			$config['protocol']= "smtp";
-			$config['mailtype']= "html";
-			$config['smtp_host']="https://zmbr.saranaonline.com";//pengaturan smtp
-			$config['smtp_port']= "587";//atau25
-			$config['smtp_timeout']= "400";
-			$config['smtp_user']= "dermawan_suprihatin@saranaonline.com"; // isi dengan email kamu
-			$config['smtp_pass']= "Wawan123!@#"; // isi dengan password kamu
-			$config['crlf']="\r\n"; 
-			$config['newline']="\r\n"; 
-			$config['wordwrap'] = TRUE;
-			//memanggil library email dan set konfigurasi untuk pengiriman email
-			$this->load->library('email');
-			$this->email->initialize($config);
-			//konfigurasi pengiriman
-			$email1="dermawan_suprihatin@saranaonline.com";
-			$this->email->from($config['smtp_user']);
-			$this->email->to($email1);
-			$this->email->subject("Project Update");
-			$this->email->message("Project sudah di update");
-			$this->email->send();
-			
 			header('location:'.base_url().'project');
 		}
 	}
@@ -279,5 +254,48 @@ class Project extends CI_Controller{
 			header('location:'.base_url().'project');
 		}
 	}
-
+	 
+    function send_report_qt(){
+		if ($this->session->userdata('ROLEID') == '2' or $this->session->userdata('ROLEID') == '1') {  
+	
+			$data1=array('data_project'=>$this->model_app->getAllDataProjectPerQT());
+			$config = array();
+			$config['charset'] = 'utf-8';
+			$config['useragent'] = 'sendmail';
+			$config['protocol']= "smtp";
+			$config['mailtype']= "html";
+			$config['smtp_host']="ssl://zmbr.saranaonline.com";//pengaturan smtp
+			$config['smtp_port']= "465";//atau587
+			$config['smtp_timeout']= "400";
+			$config['smtp_user']= "dermawan_suprihatin@saranaonline.com"; // isi dengan email kamu
+			$config['smtp_pass']= "Wawan123!@#"; // isi dengan password kamu
+			$config['crlf']="\r\n"; 
+			$config['newline']="\r\n"; 
+			$config['wordwrap'] = TRUE;
+			//memanggil library email dan set konfigurasi untuk pengiriman email
+			
+			$this->email->initialize($config);
+			//konfigurasi pengiriman
+			$email1="dermawan_suprihatin@saranaonline.com";
+			$email2="dermawan.suprihatin@gmail.com";
+			$this->email->from($config['smtp_user']);
+			$this->email->to($email1);
+			$this->email->cc($email2);
+			$this->email->subject("".$this->session->userdata('USERNAME')." Report ".date('Y-m-d')."");
+				$body = $this->load->view('t_email.php',$data1,TRUE);
+			$this->email->message($body); 
+			
+			if ($this->email->send())
+			{
+				$this->session->set_flashdata('notif-sukses','Report Berhasil dikirim');
+				redirect('project');
+			}
+			else
+			{
+				$this->session->set_flashdata('notif-gagal','Report gagal dikirim');
+				redirect('project');
+			}
+			 
+		}
+	}
 }

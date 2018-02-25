@@ -34,6 +34,7 @@ class Dashboard extends CI_Controller{
 		
 		$data=array(
 			'data_grafiknama'=>$this->model_app->getDataGrafiknama(),
+			'data_grafikstatus'=>$this->model_app->getDataGrafikstatus(),
 			'data_grafik'=>$this->model_app->getDataGrafik()
 		);
 			

@@ -39,7 +39,12 @@ class Model_app extends CI_Model{
 	
 	function insertData($table,$data)
     {
-        $this->db->insert($table,$data);
+        $query=$this->db->insert($table,$data);
+        if($query) {
+            return TRUE; //if query is true
+        } else {
+            return FALSE; //if query is wrong
+        }
 	} 
 	
     function updateData($table,$data,$field_key)
@@ -135,7 +140,11 @@ class Model_app extends CI_Model{
 		} 
 		
 		function getDataGrafiknama(){ 
-			return $this->db->query("SELECT nama_qt, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE() group by nama_qt ")->result();
+			return $this->db->query("SELECT nama_qt, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE()-2 group by nama_qt ")->result();
+		} 
+		
+		function getDataGrafikstatus(){ 
+			return $this->db->query("SELECT status_project, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE()-2 group by status_project ")->result();
 		} 
 		
 	// Bagian Dashboard
@@ -352,6 +361,16 @@ class Model_app extends CI_Model{
 		b.id_name,b.username,b.pwd
 		from webrole a left join webuser b on a.roleid=b.roleid
 		")->result();	
+    }
+    
+    function updateDataWhereOnly($table,$data,$field_key)
+    {
+        $query=$this->db->update($table,$data,$field_key);
+        if($query) {
+            return TRUE; //if query is true
+        } else {
+            return FALSE; //if query is wrong
+        }
     }
 	//Bagian Users =================
 }

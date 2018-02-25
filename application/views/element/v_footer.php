@@ -80,54 +80,26 @@
 <!-- js grafik -->
 <script type="text/javascript">
 (function() {
-		var plot = $.plot('#grafikproject', flotBasicData, {
-			series: {
-				lines: {
-					show: true,
-					fill: true,
-					lineWidth: 3,
-					fillColor: {
-						colors: [{
-							opacity: 0.05
-						}, {
-							opacity: 0.05
-						}, {
-							opacity: 0.05
-						}]
-					}
-				},
-				points: {
-					show: true
-				},
-				shadowSize: 0
-			},
-			grid: {
-				hoverable: true,
-				clickable: true,
-				borderColor: 'rgba(0,0,0,0.1)',
-				borderWidth: 1,
-				labelMargin: 15,
-				backgroundColor: 'transparent'
-			},
-			yaxis: {
-				color: 'rgba(0,0,0,0.1)'
-			},
-			xaxis: {
-				mode: 'categories',
-				color: 'rgba(0,0,0,0.1)'
-			},
-			tooltip: true,
-			tooltipOpts: {
-				content: '%s: Value of %x is %y',
-				shifts: {
-					x: -60,
-					y: 25
-				},
-				defaultTheme: false
-			}
-		});
+
+	/*
+	Morris: Bar
+	*/
+	Morris.Bar({
+		resize: true,
+		element: 'morrisBar',
+		data: morrisBarData,
+		xkey: 'namaqt',
+		ykeys: 
+		[
+		<?php foreach($data_grafikstatus as $d){?>
+		"<?php echo $d->status_project;?>",<?php } ?>],
+		labels: [
+		<?php foreach($data_grafikstatus as $a){?>
+		"<?php echo $a->status_project;?>",<?php } ?>],
+		hideHover: true
+	});
 	})();
-</script>  
+</script>
 <!-- js grafik -->
 	</body>
 </html>

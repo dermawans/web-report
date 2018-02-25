@@ -1,5 +1,5 @@
 <!--========================= Content Wrapper ==============================-->
-   
+
 <!-- start: page -->
 <div class="row">
     <section class="panel panel-dark">
@@ -18,7 +18,18 @@
                         </li> 
                     </ul>
                     <div class="tab-content">
-                    	
+						<!-- NOTIF -->
+						<?php
+						$message_sukses = $this->session->flashdata('notif-sukses');
+						if($message_sukses){
+							echo '<p class="alert alert-success text-center">'.$message_sukses .'</p>';
+						}
+						$message_gagal = $this->session->flashdata('notif-gagal');
+						if($message_gagal)
+						{
+							echo '<p class="alert alert-danger text-center">'.$message_gagal .'</p>';
+						}
+						?>   
                         <!--awal tab user-->
                         <div id="user" class="tab-pane active">
                             <!--user-->

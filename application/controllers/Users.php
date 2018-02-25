@@ -44,16 +44,26 @@ class Users extends CI_Controller{
     function add_user(){
 		if ($this->session->userdata('ROLEID') == '4' or $this->session->userdata('ROLEID') == '2') {  
 		
-			$user['id_user'] = $this->input->post('id_user');
-			$user['level'] = $this->input->post('level');
-			$user['username'] = $this->input->post('username');
-			$user['password'] = md5($this->input->post('password'));
-			$user['id_agen'] = $this->input->post('id_agen');
-			$user['name'] = $this->input->post('name');
-			$user['date_create'] = $this->input->post('date_create');
-			$user['created'] = $this->input->post('created');
-	
-			$this->db->insert('tbl_master_user', $user);
+			$data['id_user'] = $this->input->post('id_user');
+			$data['level'] = $this->input->post('level');
+			$data['username'] = $this->input->post('username');
+			$data['password'] = md5($this->input->post('password'));
+			$data['id_agen'] = $this->input->post('id_agen');
+			$data['name'] = $this->input->post('name');
+			$data['date_create'] = $this->input->post('date_create');
+			$data['created'] = $this->input->post('created');
+			$table="tbl_master_user");
+			$proses=$this->model_app->insertData($table,$data);
+			if ($proses == TRUE)
+			{
+				$this->session->set_flashdata('notif-sukses','User berhasil ditambah');
+				redirect('users');
+			}
+			else
+			{
+				$this->session->set_flashdata('notif-gagal','User gagal ditambah');
+				redirect('users');
+			}
 			
 			header('location:'.base_url().'users');
 		}
@@ -73,12 +83,22 @@ class Users extends CI_Controller{
 	//    UPDATE DATA PASSWORD USER
     function change_password(){
 			
-			$id_name['id_name']= $this->input->post('id_name');
-			$password['pwd'] = md5($this->input->post('password'));
-	
-			$this->db->update('webuser', $password, $id_name);
+			$field_key['id_name']= $this->input->post('id_name');
+			$data['pwd'] = md5($this->input->post('password'));
+			$table="webuser";
+			$proses=$this->model_app->updateDataWhereOnly($table,$data,$field_key);
 			
-			header('location:'.base_url().'users');
+			if ($proses == TRUE)
+			{
+				$this->session->set_flashdata('notif-sukses','Password Berhasil dirubah');
+				redirect('users');
+			}
+			else
+			{
+				$this->session->set_flashdata('notif-gagal','Password gagal dirubah');
+				redirect('users');
+			}
+			
 		
 	}
 	

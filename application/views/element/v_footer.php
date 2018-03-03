@@ -100,6 +100,55 @@
 	});
 	})();
 </script>
-<!-- js grafik -->
+
+<!-- js grafik QT FOR MANAGEMENT-->
+<script type="text/javascript">
+(function() {
+
+	/*
+	Morris: Bar
+	*/
+	Morris.Bar({
+		resize: true,
+		element: 'morrisBarQT',
+		data: morrisBarData1,
+		xkey: 'namaQT',
+		ykeys: 
+		[
+		<?php foreach($data_grafikstatus as $d1){?>
+		"<?php echo $d1->status_project;?>",<?php } ?>],
+		labels: [
+		<?php foreach($data_grafikstatus as $a1){?>
+		"<?php echo $a1->status_project;?>",<?php } ?>],
+		hideHover: true
+	});
+	})();
+</script>
+<!-- js grafik QT FOR MANAGEMENT-->
+
+<!-- js grafik PMO FOR MANAGEMENT-->
+<script type="text/javascript">
+(function() {
+
+	/*
+	Morris: Bar
+	*/
+	Morris.Bar({
+		resize: true,
+		element: 'morrisBarPMO',
+		data: morrisBarData2,
+		xkey: 'namaPMO',
+		ykeys: 
+		[
+		<?php foreach($data_grafikstatus as $d2){?>
+		"<?php echo $d2->status_project;?>",<?php } ?>],
+		labels: [
+		<?php foreach($data_grafikstatus as $a2){?>
+		"<?php echo $a2->status_project;?>",<?php } ?>],
+		hideHover: true
+	});
+	})();
+</script>
+<!-- js grafik PMO FOR MANAGEMENT-->
 	</body>
 </html>

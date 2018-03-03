@@ -33,7 +33,8 @@ class Dashboard extends CI_Controller{
         ); 
 		
 		$data=array(
-			'data_grafiknama'=>$this->model_app->getDataGrafiknama(),
+            'data_grafiknamaQT'=>$this->model_app->getDataGrafiknamaQT(),
+			'data_grafiknamaPMO'=>$this->model_app->getDataGrafiknamaPMO(),
 			'data_grafikstatus'=>$this->model_app->getDataGrafikstatus(),
 			'data_grafik'=>$this->model_app->getDataGrafik()
 		);

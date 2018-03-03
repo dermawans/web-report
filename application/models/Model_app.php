@@ -139,12 +139,16 @@ class Model_app extends CI_Model{
 			return $this->db->query("select nama_qt,status_project,jumlah from pj_summary group by status_project,nama_qt")->result();
 		} 
 		
-		function getDataGrafiknama(){ 
-			return $this->db->query("SELECT nama_qt, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE()-2 group by nama_qt ")->result();
+		function getDataGrafiknamaQT(){ 
+			return $this->db->query("SELECT nama_qt, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE() AND role_id in ('1','2') group by nama_qt ")->result();
+		} 
+
+		function getDataGrafiknamaPMO(){ 
+			return $this->db->query("SELECT nama_qt, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE() AND role_id in ('3','4') group by nama_qt ")->result();
 		} 
 		
 		function getDataGrafikstatus(){ 
-			return $this->db->query("SELECT status_project, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE()-2 group by status_project ")->result();
+			return $this->db->query("SELECT status_project, DATE_FORMAT(pj_summary.datecreated, '%Y-%m-%d') FROM pj_summary WHERE DATE(datecreated) = CURDATE() group by status_project ")->result();
 		} 
 		
 	// Bagian Dashboard
@@ -182,12 +186,13 @@ class Model_app extends CI_Model{
 		    }
 		    return "P".$kd;
 		} 
-		
+	 
+
     function getAllDataProject(){
 			return $this->db->query("
 			select distinct
 			a.kd_project, a.projectname, a.create_date, 
-			b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,
+			b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,b.file_project,b.priority,
 			c.username as qtname,
 			d.username as pmoname
 				from  
@@ -195,7 +200,7 @@ class Model_app extends CI_Model{
 				left join projecthistory b on a.kd_project=b.kd_project
 				left join webuser c on b.id_qtname=c.id_name
 				left join webuser d on b.id_pmoname=d.id_name
-				where b.isactive=1
+				where b.isactive=1 and status_project not in ('Close','Drop','Handover') 
 				order by a.create_date desc
 		")->result();
     }
@@ -205,14 +210,14 @@ class Model_app extends CI_Model{
         return $this->db->query("
         select distinct
 		a.kd_project, a.projectname, a.create_date, 
-		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,
+		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,b.file_project,b.priority,
 		c.username as qtname,
 		d.username as pmoname
 			from core_project a 
 			left join projecthistory b on a.kd_project=b.kd_project
 			left join webuser c on b.id_qtname=c.id_name
 			left join webuser d on b.id_pmoname=d.id_name
-			where b.isactive=1 and b.id_qtname= '".$id_qtname."'
+			where b.isactive=1 and b.id_qtname= '".$id_qtname."'  and status_project not in ('Close','Drop','Handover') 
 			order by a.create_date desc
 		")->result();
     }
@@ -222,25 +227,77 @@ class Model_app extends CI_Model{
         return $this->db->query("
         select distinct
 		a.kd_project, a.projectname, a.create_date, 
-		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,
+		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,b.file_project,b.priority,
 		c.username as qtname,
 		d.username as pmoname
 			from core_project a 
 			left join projecthistory b on a.kd_project=b.kd_project
 			left join webuser c on b.id_qtname=c.id_name
 			left join webuser d on b.id_pmoname=d.id_name
-			where b.isactive=1 and b.id_pmoname= '".$id_pmoname."'
+			where b.isactive=1 and b.id_pmoname= '".$id_pmoname."'  and status_project not in ('Close','Drop','Handover') 
 			order by a.create_date desc
 		")->result();
     }
 	
+	
+    function getAllDataInactiveProject(){
+			return $this->db->query("
+			select distinct
+			a.kd_project, a.projectname, a.create_date, 
+			b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,b.file_project,b.priority,
+			c.username as qtname,
+			d.username as pmoname
+				from  
+				core_project a 
+				left join projecthistory b on a.kd_project=b.kd_project
+				left join webuser c on b.id_qtname=c.id_name
+				left join webuser d on b.id_pmoname=d.id_name
+				where b.isactive=1 and status_project in ('Close','Drop','Handover') 
+				order by a.create_date desc
+		")->result();
+    }
+
+    function getAllDataInactiveProjectPerQT(){
+		$id_qtname = $this->session->userdata('ID'); 
+        return $this->db->query("
+        select distinct
+		a.kd_project, a.projectname, a.create_date, 
+		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,b.file_project,b.priority,
+		c.username as qtname,
+		d.username as pmoname
+			from core_project a 
+			left join projecthistory b on a.kd_project=b.kd_project
+			left join webuser c on b.id_qtname=c.id_name
+			left join webuser d on b.id_pmoname=d.id_name
+			where b.isactive=1 and b.id_qtname= '".$id_qtname."' and status_project in ('Close','Drop','Handover') 
+			order by a.create_date desc
+		")->result();
+    }
+
+    function getAllDataInactiveProjectPerPMO(){
+		$id_pmoname = $this->session->userdata('ID'); 
+        return $this->db->query("
+        select distinct
+		a.kd_project, a.projectname, a.create_date, 
+		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,b.file_project,b.priority,
+		c.username as qtname,
+		d.username as pmoname
+			from core_project a 
+			left join projecthistory b on a.kd_project=b.kd_project
+			left join webuser c on b.id_qtname=c.id_name
+			left join webuser d on b.id_pmoname=d.id_name
+			where b.isactive=1 and b.id_pmoname= '".$id_pmoname."' and status_project in ('Close','Drop','Handover') 
+			order by a.create_date desc
+		")->result();
+    }
+
 	function getDataProjectForCoordinator(){
 		$kd_project = array();
 		$kd_project = $this->uri->segment(3);
         return $this->db->query("
         select distinct
 		a.kd_project, a.projectname, a.create_date, 
-		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,
+		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,b.file_project,b.priority,
 		c.username as qtname,
 		d.username as pmoname
 			from core_project a 
@@ -260,7 +317,7 @@ class Model_app extends CI_Model{
         return $this->db->query("
         select distinct
 		a.kd_project, a.projectname, a.create_date, 
-		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,
+		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,b.file_project,b.priority,
 		c.username as qtname,
 		d.username as pmoname
 			from core_project a 
@@ -280,7 +337,7 @@ class Model_app extends CI_Model{
         return $this->db->query("
         select distinct
 		a.kd_project, a.projectname, a.create_date, 
-		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,
+		b.id_history,b.id_qtname,b.id_pmoname,b.status_project,b.st_awal,b.st_akhir,b.description,b.file_project,b.priority,
 		c.username as qtname,
 		d.username as pmoname
 			from core_project a 
@@ -297,7 +354,7 @@ class Model_app extends CI_Model{
 		$kd_project = $this->uri->segment(3);
 		return $this->db->query("
 			select distinct
- 			a.id_history,a.status_project,a.create_date,a.description, 
+ 			a.id_history,a.status_project,a.create_date,a.description,a.file_project, a.priority,
 			d.username as creator
 			from projecthistory a left join webuser b on a.id_pmoname=b.id_name
 			left join webuser c on a.id_qtname=c.id_name
@@ -308,13 +365,17 @@ class Model_app extends CI_Model{
 	function getLastStatusProjectHistory(){
 		$kd_project = array();
 		$kd_project = $this->uri->segment(3);
-		return $this->db->query("select description,status_project from projecthistory where kd_project='".$kd_project."' and isactive= '1'")->result();
+		return $this->db->query("select description,status_project,file_project,priority from projecthistory where kd_project='".$kd_project."' and isactive= '1'")->result();
     } 
  
 	//Bagian Project
 	
 	//Bagian Users =================
 	 
+	function getDataRole(){
+		return $this->db->query("select * from webrole
+		")->result();	
+    }
 	function getDataRolePMO(){
 		return $this->db->query("select * from webrole where roleid in ('3','4')
 		")->result();	

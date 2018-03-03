@@ -38,6 +38,14 @@
 					<input type="text" name="status_project" class="form-control" value="<?php echo $dp->status_project; ?>" readonly="readonly"/>
 				</div>
 			</div>
+
+			
+			<div class="form-group mt-lg">
+	            <label class="col-sm-4 control-label">priority</label>
+	            <div class="col-sm-6"> 
+	                <input type="text" name="priority" class="form-control" value="<?php echo $dp->priority; ?>" readonly="readonly"/>
+	            </div>
+	        </div>	
 									
 			<div class="form-group mt-lg">
                 <label class="col-sm-4 control-label">Start Date</label>
@@ -81,7 +89,7 @@
 									<h4 class="panel-title">
 										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#<?php echo $pahd->id_history; ?>">
 											<div class="row">
-												<div class="col-md-6 text-left">History tanggal <?php echo date("d M Y",strtotime($pahd->create_date)); ?> by <?php echo $pahd->creator; ?></div>
+												<div class="col-md-6 text-left">History tanggal <?php echo date("d M Y H:i:s",strtotime($pahd->create_date)); ?> by <?php echo $pahd->creator; ?></div>
 												<div class="col-md-6 text-right"><?php echo $pahd->status_project; ?></div>
 											</div>
 										</a>
@@ -89,19 +97,16 @@
 								</div>
 								<div id="<?php echo $pahd->id_history; ?>" class="accordion-body collapse">
 									<div class="panel-body">
-							<textarea class="form-control" readonly="readonly"><?php echo $pahd->description; ?></textarea>			
-			<!--			<section class="panel">
-							<div class="panel-body">
-								<form class="form-horizontal form-bordered form-bordered" action="#">  
-									<div class="form-group">  
-										<div>
-											<textarea class="form-control" readonly="readonly"><?php echo $pahd->description; ?></textarea>
-										</div>
-									</div>  
-								</form>
-							</div>
-						</section> -->
-									</div>
+										<?php if ($pahd->file_project <> NULL){ ?>
+											<div class="alert alert-default"><?php echo $pahd->description; ?></div>
+										<?php } else { ?>
+										<textarea class="form-control" readonly="readonly"><?php echo $pahd->description; ?></textarea>	
+										<?php } ?>
+								
+									<?php if ($pahd->file_project <> NULL){ ?>
+											<a href="<?php echo base_url(); ?>assets/file-project/<?php echo $pahd->file_project; ?>"><i class="fa fa-paperclip"></i> Download Attachment</a>
+									<?php } ?>			
+									</div> 
 								</div>
 							</div>
 						</div>

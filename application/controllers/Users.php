@@ -17,6 +17,7 @@ class Users extends CI_Controller{
             'data_pmo'=>$this->model_app->getDataPMO(),
             'data_qt'=>$this->model_app->getDataQT(),
             'data_user'=>$this->model_app->getDataUser(),
+            'data_master_role'=> $this->model_app->getDataRole(),
             'data_master_role_pmo'=> $this->model_app->getDataRolePMO(),
             'data_master_role_qt'=> $this->model_app->getDataRoleQT(),
             'data_all_user'=> $this->model_app->getAllDataUser(),
@@ -42,17 +43,13 @@ class Users extends CI_Controller{
 	
 	//    INSERT DATA USER
     function add_user(){
-		if ($this->session->userdata('ROLEID') == '4' or $this->session->userdata('ROLEID') == '2') {  
+		if ($this->session->userdata('ROLEID') == '4' or $this->session->userdata('ROLEID') == '2'  or $this->session->userdata('ROLEID') == '5') {  
 		
-			$data['id_user'] = $this->input->post('id_user');
-			$data['level'] = $this->input->post('level');
 			$data['username'] = $this->input->post('username');
-			$data['password'] = md5($this->input->post('password'));
-			$data['id_agen'] = $this->input->post('id_agen');
-			$data['name'] = $this->input->post('name');
-			$data['date_create'] = $this->input->post('date_create');
-			$data['created'] = $this->input->post('created');
-			$table="tbl_master_user");
+			$data['pwd'] = md5($this->input->post('pwd')); 
+			$data['roleid'] = $this->input->post('roleid');
+			$data['rolegroup'] = $this->input->post('roleid');
+			$table="webuser";
 			$proses=$this->model_app->insertData($table,$data);
 			if ($proses == TRUE)
 			{
@@ -64,20 +61,30 @@ class Users extends CI_Controller{
 				$this->session->set_flashdata('notif-gagal','User gagal ditambah');
 				redirect('users');
 			}
-			
-			header('location:'.base_url().'users');
+			 
 		}
 	}
 	
 	//    UPDATE DATA USER
     function save_user(){
 			
-			$id_name['id_name']= $this->input->post('id_name'); 
-			$user['username'] = $this->input->post('username'); 
-	
-			$this->db->update('webuser', $user, $id_name);
+			$field_key['id_name']= $this->input->post('id_name'); 
+			$data['username'] = $this->input->post('username');  
+			$data['roleid'] = $this->input->post('roleid');  
+			$data['rolegroup'] = $this->input->post('roleid');  
+			$table="webuser";
+			$proses=$this->model_app->updateDataWhereOnly($table,$data,$field_key);
 			
-			header('location:'.base_url().'users');
+			if ($proses == TRUE)
+			{
+				$this->session->set_flashdata('notif-sukses','Data Berhasil dirubah');
+				redirect('users');
+			}
+			else
+			{
+				$this->session->set_flashdata('notif-gagal','Data gagal dirubah');
+				redirect('users');
+			}
 	}
 	
 	//    UPDATE DATA PASSWORD USER
@@ -97,9 +104,7 @@ class Users extends CI_Controller{
 			{
 				$this->session->set_flashdata('notif-gagal','Password gagal dirubah');
 				redirect('users');
-			}
-			
-		
-	}
+			}	
+	 }
 	
 }

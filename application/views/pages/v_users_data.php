@@ -42,7 +42,7 @@
                                                 <th>No</th> 
                                                 <th>Username</th>
                                                 <th>
-                                                 <?php if ($this->session->userdata('ROLEID') == '2' or $this->session->userdata('ROLEID') == '4') 
+                                                 <?php if ($this->session->userdata('ROLEID') == '2' or $this->session->userdata('ROLEID') == '4' or $this->session->userdata('ROLEID') == '5') 
 												 { ?>
                                                 <a href="#add_user" class="modal-with-form btn btn-sm btn-dark"><i class="fa fa-plus-circle"></i> Add User</a>									 
                                                 <?php } else {?>
@@ -53,7 +53,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php if ($this->session->userdata('ROLEID') == '4') { 
+                                        <?php 
+                                        if ($this->session->userdata('ROLEID') == '5') { 
+                                            $no=1;
+                                            if(isset($data_all_user)){
+                                                foreach($data_all_user as $user){
+                                        ?>
+                                                <tr class="gradeX">
+                                                    <th><?php echo $no++; ?></th> 
+                                                    <th><?php echo $user->username; ?></th>
+                                                    <th><a href="#edit_user<?php echo $user->id_name; ?>" class="modal-with-form btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Edit</a></th>
+                                                </tr>
+                                       <?php }}}  
+											if ($this->session->userdata('ROLEID') == '4') { 
                                             $no=1;
                                             if(isset($data_pmo)){
                                                 foreach($data_pmo as $pmo){
@@ -124,6 +136,15 @@
                         <select data-plugin-selectTwo class="form-control populate" id="roleid" name="roleid" placeholder="Chose Role ID">
                     				<option value=""></option>
                             <?php
+                            if ($this->session->userdata('ROLEID') == '5'){
+								if(isset($data_master_role)){
+									foreach($data_master_role as $role_master){
+										?>
+										<option value="<?php echo $role_master->roleid;?>"><?php echo $role_master->rolename;?></option>
+									<?php
+									}
+								}
+							}
                             if ($this->session->userdata('ROLEID') == '4'){
 								if(isset($data_master_role_pmo)){
 									foreach($data_master_role_pmo as $role_pmo){
@@ -202,7 +223,23 @@
                 <div class="form-group mt-lg">
                     <label class="col-sm-4 control-label">Role</label>
                     <div class="col-sm-4">
+						 <?php
+                            if ($this->session->userdata('ROLEID') == '5'){
+							?>							
+				            	<select data-plugin-selectTwo class="form-control populate" id="roleid" name="roleid" placeholder="Chose Role ID" required>
+				        			<option value=""></option>
+						<?php		if(isset($data_master_role)){
+									foreach($data_master_role as $role_master){
+										?>
+										<option value="<?php echo $role_master->roleid;?>"><?php echo $role_master->rolename;?></option>
+									<?php
+									}
+								} ?>
+                    			</select>
+						<?php }
+						else  { ?>
                         <input type="text" name="rolename" class="form-control"  value="<?php echo $row1->rolename;?>" readonly="readonly"  required/>
+						<?php } ?>
                     </div>
                 </div>
                 

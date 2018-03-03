@@ -15,8 +15,10 @@
                     <td>End Date</td>
                     <td>Project Status</td>	
                     <td>Timeline Status</td>	
+                    <td>Priority</td>	
                     <td>PMO</td>
                     <td>QT</td> 
+                    <td>Description</td>
                 </tr> 
             <?php 
 				$no=1;
@@ -43,8 +45,10 @@
 						{ echo "Expired"; }
 						?>
 					</td>
+					<td><?php echo $row->priority; ?></td>
 					<td><?php echo $row->pmoname; ?></td>
-					<td><?php echo $row->qtname; ?></td>  
+					<td><?php echo $row->qtname; ?></td>
+					<td><?php echo $row->description; ?></td>
 				</tr>
 			  <?php }
 				}

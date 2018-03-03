@@ -41,6 +41,13 @@
 			</div>
 			
 			<div class="form-group mt-lg">
+	            <label class="col-sm-4 control-label">Priority</label>
+	            <div class="col-sm-6"> 
+	                <input type="text" name="priority" class="form-control" value="<?php echo $dp->priority; ?>" readonly="readonly"/>
+	            </div>
+	        </div>				
+
+			<div class="form-group mt-lg">
 	            <label class="col-sm-4 control-label">Start Date</label>
 	            <div class="col-md-6"> 
 	                <input type="text" name="st_awal" class="form-control" value="<?php echo $dp->st_awal; ?>" readonly="readonly"/>
@@ -64,14 +71,22 @@
 								<h4 class="panel-title">
 									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#<?php echo $pahd->id_history; ?>">
 										<div class="row">
-											<div class="col-md-6 text-left">History tanggal <?php echo date("d M Y",strtotime($pahd->create_date)); ?> by <?php echo $pahd->creator; ?></div>
+											<div class="col-md-6 text-left">History tanggal <?php echo date("d M Y H:i:s",strtotime($pahd->create_date)); ?> by <?php echo $pahd->creator; ?></div>
 											<div class="col-md-6 text-right"><?php echo $pahd->status_project; ?></div>
 										</div></a>
 								</h4>
 							</div>
 							<div id="<?php echo $pahd->id_history; ?>" class="accordion-body collapse">
 								<div class="panel-body">
-							<textarea class="form-control" readonly="readonly"><?php echo $pahd->description; ?></textarea>		
+										<?php if ($pahd->file_project <> NULL){ ?>
+											<div class="alert alert-default"><?php echo $pahd->description; ?></div>
+										<?php } else { ?>
+										<textarea class="form-control" readonly="readonly"><?php echo $pahd->description; ?></textarea>	
+										<?php } ?>
+								
+								<?php if ($pahd->file_project <> NULL){ ?>
+										<a href="<?php echo base_url(); ?>assets/file-project/<?php echo $pahd->file_project; ?>"><i class="fa fa-paperclip"></i> Download Attachment</a>
+								<?php } ?>			
 								</div>
 							</div>
 						</div>
@@ -98,7 +113,7 @@
 						  <a href="#qt_update" class="modal-with-form btn btn-primary">Update</a> 
 					<?php }
 					} ?>
-					<?php if(($this->session->userdata('ROLEID') == '3' or $this->session->userdata('ROLEID') == '4') and $lsph->status_project<>'New Project') { ?>
+					<?php if($this->session->userdata('ROLEID') == '3' or $this->session->userdata('ROLEID') == '4') { ?>
 			    	<a href="#pmo_update" class="modal-with-form btn btn-primary">Give Feedback</a> 
 					<?php }
 						}
@@ -152,6 +167,13 @@ foreach($laststatusprojecthistory as $lsph){
 		            </div>
 		        </div>
 		 
+				<div class="form-group mt-lg">
+			        <label class="col-sm-4 control-label">Priority</label>
+			        <div class="col-sm-6"> 
+			            <input type="text" name="priority" class="form-control" value="<?php echo $dp->priority; ?>" readonly="readonly"/>
+			        </div>
+			    </div>	
+
 				<div class="form-group mt-lg">
                     <label class="col-sm-4 control-label">PIC QT</label>
                     <div class="col-sm-6">
@@ -271,6 +293,13 @@ foreach($laststatusprojecthistory as $lsph){
                         </select> 
 		            </div>
 		        </div> 
+				
+				<div class="form-group mt-lg">
+			        <label class="col-sm-4 control-label">Priority</label>
+			        <div class="col-sm-6"> 
+			            <input type="text" name="priority" class="form-control" value="<?php echo $dp->priority; ?>" readonly="readonly"/>
+			        </div>
+			    </div>	
 
 				<div class="form-group mt-lg">
 		            <label class="col-sm-4 control-label">PIC QT</label>
@@ -302,6 +331,14 @@ foreach($laststatusprojecthistory as $lsph){
 		                <input type="text" name="st_akhir" class="form-control" value="<?php echo $dp->st_akhir; ?>" readonly="readonly"/>
 					</div>
 		        </div>	 
+				
+				<div class="form-group mt-lg">
+					<label class="col-md-4 control-label">File Upload</label>
+					<div class="col-md-6">
+		  		        <input type="file" name="fileupload"> 
+					</div>
+				</div>			
+	
 				<?php
 				  if(isset($laststatusprojecthistory)){
 				  foreach($laststatusprojecthistory as $lsph){
@@ -357,7 +394,7 @@ foreach($laststatusprojecthistory as $lsph){
                 <div class="form-group mt-lg">
 		            <label class="col-sm-4 control-label">Project Name</label>
 		            <div class="col-sm-6">
-		                <input type="text" name="projectname" class="form-control" value="<?php echo $dp->projectname; ?>"/>
+		                <input type="text" name="projectname" class="form-control" value="<?php echo $dp->projectname; ?>" readonly="readonly"/>
 		            </div>
 		        </div>  
 				<div class="form-group mt-lg">
@@ -367,13 +404,28 @@ foreach($laststatusprojecthistory as $lsph){
 							<option value="<?php echo $dp->status_project; ?>"><?php echo $dp->status_project; ?></option> 
                         	<option value="New Project">New Project</option> 
                         	<option value="Drop">Drop</option>   
-                        	<option value="Pending">Pending</option>  
+                        	<option value="Hold">Hold</option>  
                         	<option value="Extend">Extend</option> 
                         	<option value="Close">Close</option> 
+                        	<option value="Change Request">Change Request</option>  
                         </select>
 		            </div>
 		        </div>
-		 
+ 
+				<div class="form-group mt-lg">
+		            <label class="col-sm-4 control-label">Priority</label>
+		            <div class="col-sm-6">
+				<select data-plugin-selectTwo class="form-control populate" id="priority" name="priority" placeholder="Chose priority" required>    
+							<option value="<?php echo $dp->priority; ?>"><?php echo $dp->priority; ?></option> 
+                            <option value="Urgent">Urgent</option>
+							<option value="Very High">Very High</option>
+							<option value="High">High</option>                        	
+                        	<option value="Mid">Mid</option> 
+                        	<option value="Low">Low</option>
+                        </select> 
+		            </div>
+		        </div> 		 
+				
 				<div class="form-group mt-lg">
                     <label class="col-sm-4 control-label">PIC QT</label>
                     <div class="col-sm-6"> 
@@ -426,6 +478,13 @@ foreach($laststatusprojecthistory as $lsph){
 						</div>
 					</div>
                 </div> 
+
+				<div class="form-group mt-lg">
+					<label class="col-md-4 control-label">File Upload</label>
+					<div class="col-md-6">
+		  		        <input type="file" name="fileupload"> 
+					</div>
+				</div>
 
 				<?php
 				  if(isset($laststatusprojecthistory)){
